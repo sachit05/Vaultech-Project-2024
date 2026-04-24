@@ -7,8 +7,11 @@ Key Features
 Utility-Based Filtering: Custom categorization of devices into profiles:
 
 -Performance: Focused on processing power and multitasking.
+
 -Camera: Optimized for sensor quality and photography features.
+
 -Gaming: Highlighting refresh rates and cooling capabilities.
+
 -Multimedia: Optimized for display quality and audio output.
 
 Curated Hardware Database: A comprehensive catalog containing detailed hardware specifications and up-to-date Market Retail Prices (MRP).

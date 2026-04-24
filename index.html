@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Vaultech - The premier multi-category web application to assist users in selecting mobile devices based on Performance, Camera, Gaming, and Multimedia.">
+    <title>Vaultech | Device Selector</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+
+        :root {
+            --primary: #E50914;
+            /* Red */
+            --primary-hover: #b80710;
+            --bg-dark: #000000;
+            /* Deep Black */
+            --bg-card: #141414;
+            /* Slightly lighter black */
+            --text-light: #FFFFFF;
+            /* White */
+            --text-muted: #A3A3A3;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header Navigation */
+        header {
+            background-color: var(--bg-dark);
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--primary);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        header .logo {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+        }
+
+        header .logo span {
+            color: var(--primary);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav ul li a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+
+        nav ul li a:hover,
+        nav ul li a.active {
+            color: var(--primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 6rem 2rem;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), var(--bg-dark)), url('https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?auto=format&fit=crop&q=80&w=2000') center/cover;
+            border-bottom: 1px solid #222;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hero h1 span {
+            color: var(--primary);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto 2rem auto;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--text-light);
+            border: none;
+            padding: 1rem 2.5rem;
+            font-size: 1rem;
+            font-weight: 800;
+            border-radius: 4px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .section-title::after {
+            content: '';
+            width: 80px;
+            height: 4px;
+            background-color: var(--primary);
+            margin-top: 1rem;
+            border-radius: 2px;
+        }
+
+        /* Profile Categories */
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .category-card {
+            background-color: var(--bg-card);
+            border: 1px solid #222;
+            border-radius: 8px;
+            padding: 3rem 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background-color: var(--primary);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .category-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .category-card:hover {
+            border-color: #444;
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(229, 9, 20, 0.15);
+            background-color: #1a1a1a;
+        }
+
+        .category-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            font-weight: 800;
+        }
+
+        .category-card p {
+            font-size: 1rem;
+            color: var(--text-muted);
+        }
+
+        /* Vault Filter Bar */
+        .filter-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            background-color: var(--bg-card);
+            padding: 1.5rem 2rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .filter-bar h2 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .filter-select {
+            padding: 0.8rem 1.5rem;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            border: 1px solid #444;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
+            transition: border-color 0.3s;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem top 50%;
+            background-size: 0.65rem auto;
+            padding-right: 3rem;
+        }
+
+        .filter-select:focus {
+            border-color: var(--primary);
+        }
+
+        /* Devices Grid */
+        .devices-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .device-card {
+            background-color: var(--bg-card);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #222;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .device-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .device-image {
+            height: 250px;
+            background-color: #0a0a0a;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .device-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.7;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .device-card:hover .device-image img {
+            opacity: 1;
+            transform: scale(1.08);
+        }
+
+        .category-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background-color: var(--primary);
+            color: var(--text-light);
+            padding: 0.3rem 0.8rem;
+            font-size: 0.75rem;
+            font-weight: 800;
+            border-radius: 4px;
+            text-transform: uppercase;
+            z-index: 2;
+        }
+
+        .device-info {
+            padding: 2rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .device-info h4 {
+            font-size: 1.5rem;
+            margin-bottom: 0.2rem;
+            font-weight: 800;
+        }
+
+        .device-brand {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .device-specs {
+            list-style: none;
+            margin-bottom: 2rem;
+            flex-grow: 1;
+        }
+
+        .device-specs li {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .device-specs li::before {
+            content: "■";
+            color: var(--primary);
+            font-size: 0.6rem;
+            margin-right: 0.8rem;
+            margin-top: 0.3rem;
+        }
+
+        .device-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #333;
+            padding-top: 1.5rem;
+            margin-top: auto;
+        }
+
+        .device-price {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text-light);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--text-light);
+            border: 2px solid #444;
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Modal Structure */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background-color: var(--bg-card);
+            padding: 3rem;
+            border-radius: 8px;
+            max-width: 700px;
+            width: 95%;
+            border-top: 4px solid var(--primary);
+            position: relative;
+            transform: translateY(-30px);
+            transition: transform 0.3s ease;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 2.5rem;
+            cursor: pointer;
+            transition: color 0.3s;
+            line-height: 1;
+        }
+
+        .close-btn:hover {
+            color: var(--primary);
+        }
+
+        .modal-header {
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 1.5rem;
+        }
+
+        .modal-header h2 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+        }
+
+        .modal-brand-tag {
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .modal-body p {
+            margin-bottom: 2.5rem;
+            font-size: 1.1rem;
+            color: #CCC;
+            line-height: 1.8;
+        }
+
+        .specs-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .specs-table th,
+        .specs-table td {
+            padding: 1.2rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid #222;
+        }
+
+        .specs-table th {
+            color: var(--text-light);
+            font-weight: 800;
+            width: 40%;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .specs-table td {
+            color: var(--text-muted);
+        }
+
+        .modal-footer {
+            margin-top: 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #000;
+            padding: 2rem;
+            border-radius: 8px;
+            border: 1px solid #222;
+        }
+
+        .modal-price-large {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1;
+        }
+
+        .price-label {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            background-color: var(--bg-card);
+            border-top: 1px solid #222;
+            margin-top: 4rem;
+        }
+
+        footer p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        footer span {
+            color: var(--primary);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* SPA Page Logic */
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+
+            header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .filter-bar {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+
+            .modal-content {
+                padding: 2rem;
+                width: 100%;
+                border-radius: 0;
+                height: 100%;
+                max-height: 100vh;
+                transform: translateY(0);
+            }
+
+            .modal-footer {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+
+            .close-btn {
+                top: 1rem;
+                right: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Main Header -->
+    <header>
+        <div class="logo" onclick="showPage('home')">Vaul<span>tech</span></div>
+        <nav>
+            <ul>
+                <li><a onclick="showPage('home')" class="nav-link active" id="nav-home">Home</a></li>
+                <li><a onclick="showPage('browse')" class="nav-link" id="nav-browse">The Vault</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Home Page -->
+    <div id="page-home" class="page active">
+        <section class="hero">
+            <h1>Select with <span>Precision</span></h1>
+            <p>Welcome to Vaultech. Your premier destination to find the exact mobile hardware tailored to your specific
+                utility profile. Stop settling. Start maximizing.</p>
+            <button class="btn-primary" onclick="showPage('browse')">Enter The Vault</button>
+        </section>
+
+        <section class="container">
+            <h2 class="section-title">Define Your Profile</h2>
+            <div class="categories">
+                <div class="category-card" onclick="selectCategory('Performance')">
+                    <h3>Performance</h3>
+                    <p>Raw computing power for heavy multitasking, rendering, and productivity without compromise.</p>
+                </div>
+                <div class="category-card" onclick="selectCategory('Camera')">
+                    <h3>Camera</h3>
+                    <p>Professional grade lenses, massive sensors, and advanced computational photography.</p>
+                </div>
+                <div class="category-card" onclick="selectCategory('Gaming')">
+                    <h3>Gaming</h3>
+                    <p>Ultra-high refresh rates, active cooling systems, and sustained frame rates for esports.</p>
+                </div>
+                <div class="category-card" onclick="selectCategory('Multimedia')">
+                    <h3>Multimedia</h3>
+                    <p>Immersive high-resolution displays and rich, spatial stereo audio setups for creators.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Browse / Vault Page -->
+    <div id="page-browse" class="page">
+        <section class="container">
+            <div class="filter-bar">
+                <h2>Hardware Vault</h2>
+                <select id="category-filter" class="filter-select" onchange="renderDevices()">
+                    <option value="All">All Utility Profiles</option>
+                    <option value="Performance">Performance</option>
+                    <option value="Camera">Camera</option>
+                    <option value="Gaming">Gaming</option>
+                    <option value="Multimedia">Multimedia</option>
+                </select>
+            </div>
+
+            <div class="devices-grid" id="devices-container">
+                <!-- Javascript will inject device cards here -->
+            </div>
+        </section>
+    </div>
+
+    <!-- Details Modal -->
+    <div class="modal" id="device-modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">&times;</button>
+            <div class="modal-header">
+                <h2 id="modal-title">Device Name</h2>
+                <div class="modal-brand-tag" id="modal-brand">Brand &bull; Category</div>
+            </div>
+            <div class="modal-body">
+                <p id="modal-desc">Comprehensive description of the device emphasizing its capabilities for the selected
+                    utility profile.</p>
+
+                <h4
+                    style="font-size: 1.2rem; font-weight: 800; text-transform: uppercase; border-bottom: 2px solid #333; padding-bottom: 0.5rem; margin-bottom: 0;">
+                    Technical Specifications</h4>
+                <table class="specs-table">
+                    <tbody id="modal-specs-table">
+                        <!-- Javascript will inject table rows here -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <div>
+                    <span class="price-label">Market Retail Price</span>
+                    <div class="modal-price-large" id="modal-price">$000</div>
+                </div>
+                <button class="btn-primary" onclick="closeModal()">Close Vault</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 <span>Vaultech</span>. Engineered for optimal hardware selection.</p>
+    </footer>
+
+    <!-- Application Logic -->
+    <script>
+        // Vaultech Comprehensive Hardware Database
+        const database = [
+            {
+                id: 1,
+                name: "Apex Speedster X1",
+                brand: "Apex",
+                category: "Performance",
+                mrp: "₹1,11,999",
+                specs: {
+                    "Processor": "Snapdragon 8 Gen 3 (3.3GHz)",
+                    "RAM": "16GB LPDDR5X",
+                    "Storage": "512GB UFS 4.0",
+                    "Cooling": "Dual Vapor Chamber",
+                    "OS": "Vanilla OS 14 (Bloat-free)"
+                },
+                img: "https://images.unsplash.com/photo-1523206489230-c012c64b2b48?auto=format&fit=crop&q=80&w=600",
+                desc: "Unmatched pure computing performance designed for heavy multitasking and hardcore productivity. Equipped with a state-of-the-art vapor chamber to prevent thermal throttling under maximum load."
+            },
+            {
+                id: 2,
+                name: "Infinia CorePro 14",
+                brand: "Infinia",
+                category: "Performance",
+                mrp: "₹94,999",
+                specs: {
+                    "Processor": "Bionic A17 Pro",
+                    "RAM": "12GB Unified",
+                    "Storage": "256GB NVMe PCIe",
+                    "Battery": "5000mAh (120W Fast Charge)",
+                    "Security": "Hardware Knox"
+                },
+                img: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&q=80&w=600",
+                desc: "Sleek, highly optimized, and incredibly fast. The CorePro 14 is built for professionals who cannot afford a single frame drop or lag during intensive spreadsheet calculations or code compiling on the go."
+            },
+            {
+                id: 3,
+                name: "Vision OpticUltra 500",
+                brand: "Vision",
+                category: "Camera",
+                mrp: "₹1,22,499",
+                specs: {
+                    "Main Camera": "200MP 1-inch IMX989 Sensor",
+                    "Ultrawide": "50MP 114° FOV",
+                    "Telephoto": "50MP 5x Optical Periscope",
+                    "Image Signal Processor": "Dedicated VisionAI Chip",
+                    "Color Science": "Leica Tuned"
+                },
+                img: "https://images.unsplash.com/photo-1616348436168-de43ad0db179?auto=format&fit=crop&q=80&w=600",
+                desc: "The ultimate pocket photography tool. Captures DSLR-level shots with a massive 1-inch sensor and advanced computational photography algorithms, completely redefining low-light performance."
+            },
+            {
+                id: 4,
+                name: "FocusTech LensMaster Z",
+                brand: "FocusTech",
+                category: "Camera",
+                mrp: "₹86,999",
+                specs: {
+                    "Main Camera": "108MP Hasselblad Setup",
+                    "Portrait Lens": "32MP 2x Telephoto",
+                    "Video Capability": "8K @ 30fps / 4K @ 120fps",
+                    "Stabilization": "6-Axis Gimbal OIS",
+                    "Front Camera": "60MP Vlogging Lens"
+                },
+                img: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&q=80&w=600",
+                desc: "Built specifically for modern content creators. Features cinema-grade video recording capabilities, ultra-stable gimbal hardware, and stunning portrait shots powered by Hasselblad optics."
+            },
+            {
+                id: 5,
+                name: "Rogue Titan G9",
+                brand: "Rogue",
+                category: "Gaming",
+                mrp: "₹84,499",
+                specs: {
+                    "Display": "165Hz AMOLED (720Hz Touch Sampling)",
+                    "Cooling": "Active Built-in RGB Fan",
+                    "Controls": "Magnetic Ultrasonic Shoulder Triggers",
+                    "Battery": "6000mAh Dual-Cell",
+                    "Audio": "Front-firing Dirac Stereo"
+                },
+                img: "https://images.unsplash.com/photo-1556656793-08538906a9f8?auto=format&fit=crop&q=80&w=600",
+                desc: "Engineered exclusively for competitive mobile esports. Features zero thermal throttling thanks to an actual physical cooling fan, a massive battery, and customizable physical triggers for FPS dominance."
+            },
+            {
+                id: 6,
+                name: "Nexus PlayMax Pro",
+                brand: "Nexus",
+                category: "Gaming",
+                mrp: "₹70,499",
+                specs: {
+                    "Display": "144Hz IPS LCD",
+                    "Processor": "Dimensity 9300+",
+                    "Haptics": "Dual X-Axis Linear Motors",
+                    "Connectivity": "Wi-Fi 7 + Sub-6 5G",
+                    "Design": "Aero-Space Grade Aluminum"
+                },
+                img: "https://images.unsplash.com/photo-1556656793-08538906a9f8?auto=format&fit=crop&q=80&w=600",
+                desc: "Aggressive styling meets console-level mobile gaming. Delivers incredible sustained performance with a hyper-responsive flat display and the most advanced haptic feedback system on the market."
+            },
+            {
+                id: 7,
+                name: "Aura CineView Max",
+                brand: "Aura",
+                category: "Multimedia",
+                mrp: "₹79,999",
+                specs: {
+                    "Screen": "6.8\" 4K HDR10+ OLED",
+                    "Audio": "Quad Speakers (Dolby Atmos Certified)",
+                    "DRM Support": "Widevine L1 (4K Streaming)",
+                    "Storage": "1TB Onboard + MicroSD Slot",
+                    "Brightness": "2500 Nits Peak"
+                },
+                img: "https://images.unsplash.com/photo-1585060544812-6b45742d762f?auto=format&fit=crop&q=80&w=600",
+                desc: "A pocket theater. Experience movies, music, and digital art with breathtaking clarity and an expansive sound stage that completely surrounds you. The 4K OLED panel guarantees true blacks."
+            },
+            {
+                id: 8,
+                name: "Aura MediaFold Mini",
+                brand: "Aura",
+                category: "Multimedia",
+                mrp: "₹1,31,499",
+                specs: {
+                    "Inner Screen": "7.6\" Foldable LTPO AMOLED",
+                    "Audio": "Dual Hi-Res Certified Speakers",
+                    "Aspect Ratio": "4:3 (Optimized for Reading & Video)",
+                    "Battery": "5500mAh",
+                    "Weight": "210g"
+                },
+                img: "https://images.unsplash.com/photo-1584006682522-dc17d6c0d9ac?auto=format&fit=crop&q=80&w=600",
+                desc: "Unfolds into a pristine mini tablet. The absolute perfect form factor for reading digital comics, watching Netflix in bed, and browsing the web on a canvas that adapts to your needs."
+            }
+        ];
+
+        // SPA Navigation Logic
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+
+            // Remove active state from nav
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+
+            // Show selected page
+            document.getElementById(`page-${pageId}`).classList.add('active');
+            document.getElementById(`nav-${pageId}`).classList.add('active');
+
+            // Scroll to top
+            window.scrollTo(0, 0);
+
+            // Render devices if browsing
+            if (pageId === 'browse') {
+                renderDevices();
+            }
+        }
+
+        // Category Selection from Home Page
+        function selectCategory(category) {
+            document.getElementById('category-filter').value = category;
+            showPage('browse');
+        }
+
+        // Render Devices Grid
+        function renderDevices() {
+            const container = document.getElementById('devices-container');
+            const filter = document.getElementById('category-filter').value;
+
+            // Clear current list
+            container.innerHTML = '';
+
+            // Filter logic
+            const filteredDb = filter === 'All' ? database : database.filter(device => device.category === filter);
+
+            // Handle empty states (shouldn't happen with current data, but good practice)
+            if (filteredDb.length === 0) {
+                container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); font-size: 1.2rem; padding: 3rem;">No hardware found matching this profile.</p>';
+                return;
+            }
+
+            // Generate HTML for each device
+            filteredDb.forEach(device => {
+                const card = document.createElement('div');
+                card.className = 'device-card';
+
+                // Extract first 2 specs for the quick view card
+                const specKeys = Object.keys(device.specs);
+                const quickSpecs = specKeys.slice(0, 2).map(key => `<li>${key}: ${device.specs[key]}</li>`).join('');
+
+                card.innerHTML = `
+                    <div class="category-badge">${device.category}</div>
+                    <div class="device-image">
+                        <img src="${device.img}" alt="${device.name}" loading="lazy">
+                    </div>
+                    <div class="device-info">
+                        <h4>${device.name}</h4>
+                        <div class="device-brand">${device.brand}</div>
+                        <ul class="device-specs">
+                            ${quickSpecs}
+                        </ul>
+                        <div class="device-footer">
+                            <div class="device-price">${device.mrp}</div>
+                            <button class="btn-outline" onclick="openModal(${device.id})">View Specs</button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Modal Logic
+        function openModal(id) {
+            const device = database.find(d => d.id === id);
+            if (!device) return;
+
+            // Populate Modal Content
+            document.getElementById('modal-title').textContent = device.name;
+            document.getElementById('modal-brand').textContent = `${device.brand} \u2022 ${device.category} Profile`;
+            document.getElementById('modal-price').textContent = device.mrp;
+            document.getElementById('modal-desc').textContent = device.desc;
+
+            // Populate Specifications Table
+            const specsTable = document.getElementById('modal-specs-table');
+            specsTable.innerHTML = '';
+            for (const [key, value] of Object.entries(device.specs)) {
+                specsTable.innerHTML += `
+                    <tr>
+                        <th>${key}</th>
+                        <td>${value}</td>
+                    </tr>
+                `;
+            }
+
+            // Display Modal
+            const modal = document.getElementById('device-modal');
+            modal.classList.add('active');
+
+            // Prevent body scrolling
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('device-modal');
+            modal.classList.remove('active');
+
+            // Restore body scrolling
+            document.body.style.overflow = 'auto';
+        }
+
+        // Event Listeners
+        window.addEventListener('click', function (event) {
+            const modal = document.getElementById('device-modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+
+        // Keyboard accessibility for modal
+        window.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') {
+                const modal = document.getElementById('device-modal');
+                if (modal.classList.contains('active')) {
+                    closeModal();
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -27,3 +27,4 @@ Frontend: HTML5 (Multi-page architectural layout)
 Styling: CSS3 (Visual structure and categorization)
 
 Deployment:
+https://sachit05.github.io/Vaultech-Project-2024/

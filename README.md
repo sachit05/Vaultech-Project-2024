@@ -25,3 +25,5 @@ Technical Stack
 Frontend: HTML5 (Multi-page architectural layout)
 
 Styling: CSS3 (Visual structure and categorization)
+
+Deployment:

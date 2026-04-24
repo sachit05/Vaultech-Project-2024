@@ -16,7 +16,6 @@ Utility-Based Filtering: Custom categorization of devices into profiles:
 
 -Multimedia: Optimized for display quality and audio output.
 
-
 Curated Hardware Database: A comprehensive catalog containing detailed hardware specifications and up-to-date Market Retail Prices (MRP).
 
 Responsive Multi-Page Layout: A structured user interface built for easy navigation across different device categories.
